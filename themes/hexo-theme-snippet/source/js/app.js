@@ -11,6 +11,7 @@ window.onload = function() {
         $gitcomment = document.getElementById("gitcomment"),
         $backToTop = document.getElementById("back-to-top"),
         $toc = document.getElementById("article-toc"),
+        //$header = document.querySelector(".main-navigation"),
         timer = null;
 
     //设备判断
@@ -70,35 +71,27 @@ window.onload = function() {
     }
     //滚动回调
     var scrollCallback = function() {
-        if ($process) {
-            $process.style.width = (getScrollTop() / ($body.scrollHeight - window.innerHeight)) * 100 + "%";
-        }
-        (isPC && getScrollTop() >= 300) ? $backToTop.removeAttribute("class","hide") : $backToTop.setAttribute("class","hide");
+
+        (isPC && getScrollTop() >= 200) ? $backToTop.removeAttribute("class","hide") : $backToTop.setAttribute("class","hide");
         imgsAjax($ajaxImgs);
     };
     scrollCallback();
 
     //监听滚动事件
-    window.addEventListener('scroll', function() {
-        if($toc){
-            var top = $toc.offsetTop;
-            var left = $toc.offsetLeft;
-            var width = $toc.offsetWidth;
-            if(getScrollTop() <= top){
-                $toc.style = "";
-            } else {
-                $toc.style.position = "fixed";
-                $toc.style.top = "5px";
-                $toc.style.left = left + "px";
-                $toc.style.width = width + "px"
-            }
+    function scrollFn() {
+        // var scrollTop = getScrollTop();
+        console.log('aa');
+
+        if ($process) {
+            $process.style.width = (getScrollTop() / ($body.scrollHeight - window.innerHeight)) * 100 + "%";
         }
 
         clearTimeout(timer);
         timer = setTimeout(function fn() {
             scrollCallback();
         }, 200);
-    });
+    }
+    window.addEventListener('scroll', throttle(scrollFn, 100, 1000));
 
     //返回顶部
 	$backToTop.onclick = function() {
@@ -114,4 +107,22 @@ window.onload = function() {
 	    });
 	};
 
+	//截流函数
+    function throttle(method,delay,duration){
+        var timer=null;
+        var begin=new Date();
+        return function(){
+            var context=this, args=arguments;
+            var current=new Date();
+            clearTimeout(timer);
+            if(current-begin>=duration){
+                method.apply(context,args);
+                begin=current;
+            }else{
+                timer=setTimeout(function(){
+                    method.apply(context,args);
+                },delay);
+            }
+        }
+    }
 };
