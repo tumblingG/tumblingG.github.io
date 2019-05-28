@@ -85,4 +85,4 @@ theme: material-x
 deploy:
   type: git
   repo: https://github.com/tumblingG/tumblingG.github.io #https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io
-  branch: gh-pages
+  branch: master
