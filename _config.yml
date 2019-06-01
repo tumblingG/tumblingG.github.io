@@ -16,9 +16,29 @@ timezone:
 favicon: https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico
 avatar: https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png
 
+leancloud:
+ app_id: CVBp7sJ2HSWivYqGLWtdwOww-gzGzoHsz
+ app_key: 3yzjbGYD392k7S9V83bxlUnI
+
+import:
+ script:
+  - "<script src='https://g.joyinshare.com/hc/ribbon.min.js' type='text/javascript'></script>"
+
+
+live2d:
+ enable: true
+ scriptFrom: jsdelivr
+ model:
+  use: live2d-widget-model-epsilon2_1 #模型选择
+ display:
+  position: right  #模型位置
+  width: 150       #模型宽度
+  height: 300      #模型高度
+ mobile:
+  show: false      #是否在手机端显示
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://tumblingg.github.io
+url: https://tumbling.top
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -79,6 +99,11 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: material-x
+#Feed Atom
+feed:
+ type: atom
+ path: atom.xml
+ limit: 20
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
