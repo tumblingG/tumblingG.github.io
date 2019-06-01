@@ -3,14 +3,13 @@ title: Hello World
 categories: 前端
 tags: js
 ---
-欢迎来到我的个人主页，Have a good time! ヾ(≧▽≦*)o
-于 2018/4/21，终于借助 Hexo 和 Coding 的页面托管服务将个人主页搭建完毕。
-于 2019/1/28，更新主题并换用 Netlify 托管。
-P.S. 如果有谁想一起建个人主页的，可以通过”关于”联系我一起探讨，顺便交换一下友链蛤
 
-<!--more-->
+
+
 
 Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+
+<!--more-->
 
 ## Quick Start
 
