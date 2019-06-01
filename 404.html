@@ -9,6 +9,8 @@
   
 
   
+  <link rel="alternate" href="/atom.xml" title="zcblog">
+  
 
   <meta name="HandheldFriendly" content="True">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,7 +31,7 @@
   
 
   
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tumblingG/tumblingG.github.io@master/style.min.css">
   
 
   <script>
@@ -133,7 +135,7 @@
             </li>
           
             <li>
-							<a class="nav flat-box" href="/projects/" id="projects">
+							<a class="nav flat-box" href="https://github.com/tumblingG?tab=repositories" id="https:github.comtumblingG?tab=repositories">
 								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
 							</a>
             </li>
@@ -141,12 +143,6 @@
             <li>
 							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
 								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
-							</a>
-            </li>
-          
-            <li>
-							<a class="nav flat-box" href="https://xaoxuu.com/wiki/material-x/" rel="nofollow" id="https:xaoxuu.comwikimaterial-x">
-								<i class="fas fa-book fa-fw"></i>&nbsp;主题文档
 							</a>
             </li>
           
@@ -207,7 +203,21 @@
 
 
 
-  
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
 
 
   
@@ -256,7 +266,7 @@
           
         
           
-            <a href="https://music.163.com/#/user/home?id=63035382" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+            <a href="https://music.163.com/#/user/home?id=292837497" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
             </a>
           
         
@@ -282,12 +292,12 @@
             <section class="widget plain">
   
 <header class="material">
-  <div><i class=" fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;座右铭</div>
+  <div><i class=" fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;今日歌单</div>
   
 </header>
 
   <div class="content material">
-    <p>你好吗？</p>
+    <p>欧美风格</p>
 
   </div>
 </section>
@@ -345,6 +355,14 @@
           
         
       
+        
+          
+          
+            
+
+          
+        
+      
     
 
   
@@ -371,7 +389,7 @@
         
       
         
-          <a href="https://music.163.com/#/user/home?id=63035382" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          <a href="https://music.163.com/#/user/home?id=292837497" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
           </a>
         
       
@@ -407,7 +425,7 @@
   <!-- require MetingJS -->
   <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
-  <meting-js color="#1BCDFC" server="netease" type="playlist" fixed="true" autoplay="true" id="60198" volume="0.7">
+  <meting-js color="#1BCDFC" server="netease" type="playlist" fixed="true" autoplay="false" id="60198" volume="0.7">
   </meting-js>
 
 
@@ -468,6 +486,38 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+      path: "/404.html",
+    
+    appId: "CVBp7sJ2HSWivYqGLWtdwOww-gzGzoHsz",
+    appKey: "3yzjbGYD392k7S9V83bxlUnI",
+    placeholder: "请留言告诉我您要访问哪个页面找不到了",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
 
 
 
@@ -586,6 +636,9 @@
 
 
 
+
+
+<script src="https://g.joyinshare.com/hc/ribbon.min.js" type="text/javascript"></script>
 
 
   <script>setLoadingBarProgress(100);</script>
