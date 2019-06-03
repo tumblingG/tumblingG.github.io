@@ -187,7 +187,7 @@
         
   
     <h1 class="title">
-      <a href="/2019/06/03/rxjs的debounceTime无效问题/">
+      <a href="/2019/06/04/rxjs的debounceTime无效问题/">
         rxjs的debounceTime无效问题
       </a>
     </h1>
@@ -203,7 +203,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2019-06-03</p>
+    <p>2019-06-04</p>
   </a>
 </div>
 
@@ -255,19 +255,20 @@
 
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
-          <p>事情起因：angular中用rxjs的<code>debounceTime</code>来做一个请求防抖动功能，<br>使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。<br><a id="more"></a></p>
-<h1 id="1、debounceTime功能描述"><a href="#1、debounceTime功能描述" class="headerlink" title="1、debounceTime功能描述"></a>1、debounceTime功能描述</h1><p>这里官网的一段描述，详情参考：<a href="https://rxjs.dev/api/operators/debounceTime" target="_blank" rel="noopener">debounceTime</a></p>
+          <p>事情起因：angular中用rxjs的<code>debounceTime</code>来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。</p>
+<a id="more"></a>
+<h1 id="1-debounceTime功能描述"><a href="#1-debounceTime功能描述" class="headerlink" title="1. debounceTime功能描述"></a>1. debounceTime功能描述</h1><p>这里官网的一段描述，详情参考：<a href="https://rxjs.dev/api/operators/debounceTime" target="_blank" rel="noopener">debounceTime</a></p>
 <blockquote>
-<p>Emits a value from the source Observable only after a particular time span has<br>passed without another source emission.</p>
+<p>Emits a value from the source Observable only after a particular time span has passed without another source emission.</p>
 </blockquote>
 <p>意思是：在一个特殊的时间间隔内没有接收到源的另一个新的提交值则提交当前<code>Obserable</code>发送的值。</p>
 <p>这里有一点需要特别注意：这里的多次提交值的源是指<code>同一个源</code>，问题就出在这里。</p>
 <p>下面给出一个官方的例子:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; debounceTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clicks = fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>);</span><br><span class="line"><span class="keyword">const</span> result = clicks.pipe(debounceTime(<span class="number">1000</span>));</span><br><span class="line">result.subscribe(<span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(x));</span><br></pre></td></tr></table></figure></p>
 <p>注意这里的源只有一个<code>clicks</code>,无论在文档中点击多少次，值都是由这个observable发出的，所以能够成功。</p>
-<h1 id="angular-http请求的情况"><a href="#angular-http请求的情况" class="headerlink" title="angular http请求的情况"></a>angular http请求的情况</h1><p><code>httpClient</code>的请求方法会返回一个<code>Obserable</code>，如下所示：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getConfig = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.http.get(<span class="string">'/config'</span>).subscribe(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// do something here</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-angular-http请求的情况"><a href="#2-angular-http请求的情况" class="headerlink" title="2. angular http请求的情况"></a>2. angular http请求的情况</h1><p><code>httpClient</code>的请求方法会返回一个<code>Obserable</code>，如下所示：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getConfig = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.http.get(<span class="string">'/config'</span>).subscribe(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// do something here</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>那么问题来了，如果我用<code>debounceTime</code>来防抖动，代码如下所示：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; debounceTime &#125; <span class="keyword">from</span> <span class="string">'rxjs/operators'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getConfig = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.http.get(<span class="string">'/config'</span>).pipe(debounceTime(<span class="number">1000</span>))</span><br><span class="line">    .subscribe(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// do something here</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>好像这样子是没什么问题，其实不然，这里的<code>http.get()</code>每次返回不同的<code>Obserable</code>，<br>导致<code>debounceTime</code>好像没有设置一样。</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p><code>debounceTime</code>是不能用了，这里提供来一个简单的方法供参考：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> timer: any;</span><br><span class="line"><span class="keyword">const</span> getConfig = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    clearTimeout(timer);</span><br><span class="line">    timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        clearTimeout(timer);</span><br><span class="line">        <span class="keyword">this</span>.http.get(<span class="string">'/config'</span>).subscribe(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="comment">// do something here</span></span><br><span class="line">            &#125;);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3. 解决方法"></a>3. 解决方法</h1><p><code>debounceTime</code>是不能用了，这里提供来一个简单的方法供参考：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> timer: any;</span><br><span class="line"><span class="keyword">const</span> getConfig = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    clearTimeout(timer);</span><br><span class="line">    timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        clearTimeout(timer);</span><br><span class="line">        <span class="keyword">this</span>.http.get(<span class="string">'/config'</span>).subscribe(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="comment">// do something here</span></span><br><span class="line">            &#125;);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>通过使用定时器来实现，每次调用<code>getConfig()</code>方法的时候，如果时间间隔少于1s就会取消以前的请求。</p>
 
         </div>
@@ -280,10 +281,10 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-03T23:50:21+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-06-04T00:02:02+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>最后更新于 2019年6月3日</p>
+    <p>最后更新于 2019年6月4日</p>
   </a>
 </div>
 
@@ -303,7 +304,7 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://tumbling.top/2019/06/03/rxjs的debounceTime无效问题/&title=rxjs的debounceTime无效问题 | zcblog&pics=https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png&summary=事情起因：angular中用rxjs的debounceTime来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://tumbling.top/2019/06/04/rxjs的debounceTime无效问题/&title=rxjs的debounceTime无效问题 | zcblog&pics=https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png&summary=事情起因：angular中用rxjs的debounceTime来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
           
@@ -311,7 +312,7 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://tumbling.top/2019/06/03/rxjs的debounceTime无效问题/&title=rxjs的debounceTime无效问题 | zcblog&pics=https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png&summary=事情起因：angular中用rxjs的debounceTime来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://tumbling.top/2019/06/04/rxjs的debounceTime无效问题/&title=rxjs的debounceTime无效问题 | zcblog&pics=https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png&summary=事情起因：angular中用rxjs的debounceTime来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
           
@@ -319,7 +320,7 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://tumbling.top/2019/06/03/rxjs的debounceTime无效问题/&title=rxjs的debounceTime无效问题 | zcblog&pics=https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png&summary=事情起因：angular中用rxjs的debounceTime来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://tumbling.top/2019/06/04/rxjs的debounceTime无效问题/&title=rxjs的debounceTime无效问题 | zcblog&pics=https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png&summary=事情起因：angular中用rxjs的debounceTime来做一个请求防抖动功能，使其在用户输入的时候不会频繁发送请求，后来发现这样做是不行的。">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
           
@@ -338,30 +339,6 @@
 
 
         
-        
-            <div class="prev-next">
-                
-                
-                    <section class="next">
-                        <span class="art-item-right" aria-hidden="true">
-                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
-                            <h4>
-                                <a href="/2019/06/01/我是一个项目/" rel="prev" title="我是一个项目">
-                                    
-                                        我是一个项目
-                                    
-                                </a>
-                            </h4>
-                            
-                                
-                                <h6 class="tags">
-                                    <a class="tag" href="/tags/js/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>js</a>
-                                </h6>
-                            
-                        </span>
-                    </section>
-                
-            </div>
         
       </section>
     </article>
@@ -468,7 +445,7 @@
 </header>
 
     <div class="content material">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、debounceTime功能描述"><span class="toc-text">1、debounceTime功能描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#angular-http请求的情况"><span class="toc-text">angular http请求的情况</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方法"><span class="toc-text">解决方法</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-debounceTime功能描述"><span class="toc-text">1. debounceTime功能描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-angular-http请求的情况"><span class="toc-text">2. angular http请求的情况</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-解决方法"><span class="toc-text">3. 解决方法</span></a></li></ol>
     </div>
   </section>
 
@@ -512,7 +489,7 @@
     <div class="content material">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/categories/前端/" href="/categories/前端/"><div class="name">前端</div><div class="badge">(3)</div></a></li>
+          <li><a class="flat-box" title="/categories/前端/" href="/categories/前端/"><div class="name">前端</div><div class="badge">(1)</div></a></li>
         
       </ul>
     </div>
@@ -537,7 +514,7 @@
 </header>
 
     <div class="content material">
-      <a href="/tags/js/" style="font-size: 24px; color: #555">js</a> <a href="/tags/rxjs/" style="font-size: 14px; color: #999">rxjs</a>
+      <a href="/tags/rxjs/" style="font-size: 14px; color: #999">rxjs</a>
     </div>
   </section>
 
@@ -557,7 +534,7 @@
 </header>
 
     <div class="content material">
-      <ul class="popular-posts"><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2019/06/01/2019-05-30-hello-world/" title="Hello World" rel="bookmark">Hello World</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2019/06/01/我是一个项目/" title="我是一个项目" rel="bookmark">我是一个项目</a></h3></div></li></ul>
+      
     </div>
   </section>
 
